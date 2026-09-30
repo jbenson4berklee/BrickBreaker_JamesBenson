@@ -23,3 +23,16 @@ I will be continuously updating this repo for future progress on this assignemt.
 > Feels like the game! Super excited to see it work!
 
 > Video of progress will be located in the **Progress** folder.
+
+### Week 5
+> Added a Game Manager to reset game.
+
+> Didn't know what it meant when it said "Update the ball so that instantiation and destruction are handled in your manager".
+
+> Added audio folder and code to ball in order for sfx to play.
+
+> Attached score to Game Manager and keeps score of how many bricks destroyed.
+
+> Got a little confused on some parts, but I feel like I was able to get it done.
+
+> Video of progress will be located in the **Progress** folder.
