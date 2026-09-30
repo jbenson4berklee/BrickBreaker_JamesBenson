@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class BrickBehavior : MonoBehaviour
 {
-    
     private Rigidbody2D _rb;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -20,6 +19,7 @@ public class BrickBehavior : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ball"))
         {
+            GameBehavior.Instance.ScorePoint(transform.position.x < 0 ? 1 : 0);
             Destroy(gameObject);
         }
     }
