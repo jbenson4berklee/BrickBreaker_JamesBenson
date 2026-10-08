@@ -36,3 +36,18 @@ I will be continuously updating this repo for future progress on this assignemt.
 > Got a little confused on some parts, but I feel like I was able to get it done.
 
 > Video of progress will be located in the **Progress** folder.
+
+### Week 6
+> Ball spawns with Game Manager now (Lowkey has problems spawning two sometimes :( )
+
+> Found a way to fix the angle (somewhat) and always shooting the ball up
+
+> States are made and can be used
+
+> Pause Text appears and stops objects moving around in game
+
+> No color change, nor health was added to game (couldn't figure it out with states and color code)
+
+> Definitely got lost on the later part and spent so long that I had no time to work on 2D project. 
+
+> No Video of progress will be located in the **Progress** folder. :(
