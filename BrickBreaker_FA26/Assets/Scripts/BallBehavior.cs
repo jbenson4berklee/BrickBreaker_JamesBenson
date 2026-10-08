@@ -1,17 +1,20 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class BallBehavior : MonoBehaviour
 {
-
+    [Header("Ball Properties")]
     [SerializeField] private float _launchForce = 7.0f;
     [SerializeField] private float _speedIncrement = 1.1f;
+    [SerializeField] private float _steepnessThreshold = 0.25f;
     [SerializeField] private float _paddleInfluence = 0.4f;
 
     private AudioSource _source;
     
     private Rigidbody2D _rb;
 
+    [Header("Audio Properties")]
     [SerializeField] private AudioClip _wallHit;
     [SerializeField] private AudioClip _paddleHit;
     [SerializeField] private AudioClip _scorePoint;
@@ -34,7 +37,12 @@ public class BallBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        _rb.simulated = GameBehavior.Instance.State == Utilities.GameState.Play;
+    }
+
+    void OnDestroy()
+    {
+        GameBehavior.Instance.ResetPoint();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -45,6 +53,8 @@ public class BallBehavior : MonoBehaviour
             {
                 Vector2 direction = _rb.linearVelocity * (1.0f - _paddleInfluence)
                                     + collision.rigidbody.linearVelocity * _paddleInfluence;
+                direction.Normalize();
+                CheckSteepness(ref direction);
                 _rb.linearVelocity = _rb.linearVelocity.magnitude * direction.normalized * _speedIncrement;
             }
             _source.PlayOneShot(_paddleHit);
@@ -62,9 +72,23 @@ public class BallBehavior : MonoBehaviour
         
     }
 
+    private void CheckSteepness(ref Vector2 direction)
+    {
+        if (Mathf.Abs(direction.y) < _steepnessThreshold)
+        {
+            direction.y += 0.5f * Mathf.Sign(direction.y);
+            direction.Normalize();
+            direction.Abs();
+        }
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        ResetBall();
+        Invoke(nameof(DestroyBall), 0.5f);
+    }
+
+    private void DestroyBall()
+    {
+        Destroy(gameObject);
     }
 
     private void ResetBall()
@@ -72,6 +96,7 @@ public class BallBehavior : MonoBehaviour
         _rb.linearVelocity = Vector2.zero;
         transform.position = Vector3.zero;
         Vector2 direction = Random.insideUnitCircle.normalized;
+        CheckSteepness(ref direction);
         _rb.AddForce(direction * _launchForce, ForceMode2D.Impulse);
     }
 }

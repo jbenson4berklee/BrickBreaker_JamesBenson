@@ -28,15 +28,17 @@ public class PaddleMovement : MonoBehaviour
     void Update()
     {
         _direction = 0.0f;
-        
-        if (Input.GetKey(LeftDirection))
+        if (GameBehavior.Instance.State == Utilities.GameState.Play)
         {
-            _direction -= 1.0f;
-        }
+            if (Input.GetKey(LeftDirection))
+            {
+                _direction -= 1.0f;
+            }
 
-        if (Input.GetKey(RightDirection))
-        {
-            _direction += 1.0f;
+            if (Input.GetKey(RightDirection))
+            {
+                _direction += 1.0f;
+            } 
         }
     }
 }

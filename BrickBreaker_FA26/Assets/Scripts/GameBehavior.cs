@@ -7,6 +7,26 @@ public class GameBehavior : MonoBehaviour
     private int _score;
     
     public static GameBehavior Instance;
+    private Utilities.GameState _state;
+
+    public Utilities.GameState State
+    {
+        get => _state;
+        
+        set
+        {
+            _state = value;
+            _pauseUI.enabled = State == Utilities.GameState.Pause;
+        }
+    }
+    
+    [SerializeField] private TMP_Text _pauseUI;
+
+    [SerializeField] private GameObject _ballPrefab;
+    [SerializeField] private Transform _ballParent;
+    private GameObject _ball;
+
+    [SerializeField] private int _winningScore = 33;
 
     void Awake()
     {
@@ -24,17 +44,41 @@ public class GameBehavior : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        ResetGame();
+        ResetScore();
+        ResetPoint();
+        State = Utilities.GameState.Play;
     }
 
-    void ResetGame()
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            State = State == Utilities.GameState.Play ? Utilities.GameState.Pause : Utilities.GameState.Play;
+        }
+
+        if (!_ball)
+        {
+            ResetPoint();
+        }
+    }
+    
+    void ResetScore()
     {
             Score = 0;
     }
 
+    public void ResetPoint()
+    {
+        _ball = Instantiate(_ballPrefab, Vector3.zero, Quaternion.identity, _ballParent);
+    }    
     public void ScorePoint(int points)
     {
         Score++;
+        
+        if (Score >= _winningScore)
+        {
+            ResetScore();
+        }
     }
 
     public int Score
@@ -47,4 +91,7 @@ public class GameBehavior : MonoBehaviour
 
         get => _score;
     }
+    
+    //ISSUE: Sometimes when I start the game, the ball doesn't reset and I have 2 balls in one game
+    //This only happens part of the time, so idk how to tackle fixing this... :(
 }
